@@ -4,7 +4,7 @@ import Footer from "./Navbar/Footer";
 
 const MainContainer = () => {
   return (
-    <div className="h-screen">
+    <div className="">
       <Navbar />
       <Outlet />
       <Footer />
