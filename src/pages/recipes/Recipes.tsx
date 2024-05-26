@@ -8,7 +8,11 @@ const Recipes: React.FC = () => {
   const recipes: TRecipe[] = data?.data;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-blue-500"></div>
+      </div>
+    );
   }
 
   if (isError) {
@@ -17,7 +21,7 @@ const Recipes: React.FC = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 gap-10">
         {recipes &&
           recipes.map((recipe, i) => <RecipeCard key={i} recipe={recipe} />)}
       </div>

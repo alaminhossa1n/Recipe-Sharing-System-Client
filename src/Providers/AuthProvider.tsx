@@ -10,7 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import app from "../firebase/firebase.init";
-import { logout, setUser } from "../redux/features/auth/authSlice";
+import { logout, setToken } from "../redux/features/auth/authSlice";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -35,10 +35,8 @@ const AuthProvider = ({ children }) => {
 
       try {
         const res = await login(postData).unwrap();
-        console.log(res);
-
         const userDecoded = jwtDecode(res.data.token);
-        dispatch(setUser({ user: userDecoded, token: res.data.token }));
+        dispatch(setToken({ user: userDecoded, token: res.data.token }));
       } catch (err) {
         console.log("Error during login:", err);
       }

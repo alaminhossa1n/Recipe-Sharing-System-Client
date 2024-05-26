@@ -1,12 +1,22 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useGetSingleUserQuery,
+  useUpdateCoinMutation,
+} from "../../redux/features/auth/authApi";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
-  const currentUser = useAppSelector((state) => state.auth.user);
+  const token = useAppSelector((state) => state.auth.user);
+  const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
+  const currentUser = data?.data;
+  const [updateCoin] = useUpdateCoinMutation();
+  const [payLoading, setPayLoading] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { price, coin } = location.state;
 
@@ -24,7 +34,7 @@ const Checkout = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ price, email: currentUser?.email, coin }),
+        body: JSON.stringify({ price }),
       })
         .then((response) => {
           console.log("Response received from server:", response);
@@ -40,13 +50,12 @@ const Checkout = () => {
             throw new Error("Client secret not found in response");
           }
           setClientSecret(data.clientSecret);
-          console.log("Client secret set:", data.clientSecret);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
         });
     }
-  }, [price, currentUser]);
+  }, [price]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -93,8 +102,26 @@ const Checkout = () => {
       setCardError(confirmError.message || "An unknown error occurred");
       console.log(confirmError);
     } else {
-      console.log("Payment intent", paymentIntent?.id);
-      // Handle successful payment confirmation, e.g., set transaction ID, navigate to success page, etc.
+      if (paymentIntent.status === "succeeded") {
+        setPayLoading(true);
+        const res = await updateCoin({
+          viewerEmail: currentUser?.email,
+          type: "buy",
+          coin,
+        }).unwrap();
+        setPayLoading(false);
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Payment Successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+
+        navigate("/");
+      }
     }
   };
   return (
@@ -137,10 +164,14 @@ const Checkout = () => {
             <p className="text-lg">You'll get {coin} coins.</p>
           </div>
           <button
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 w-full"
+            className="text-white font-bold py-2 px-4 rounded w-full btn btn-neutral"
             type="submit"
           >
-            Pay
+            {payLoading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              <p>Pay</p>
+            )}
           </button>
         </form>
       </div>

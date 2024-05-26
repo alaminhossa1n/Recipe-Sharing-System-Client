@@ -33,7 +33,7 @@ const BuyCoin = () => {
         <h2 className="text-3xl font-bold mb-4 text-blue-700">500</h2>
         <p className="text-gray-700 mb-6">Pay $5</p>
         <button
-          onClick={() => handlePurchase(10, 500)}
+          onClick={() => handlePurchase(5, 500)}
           className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
         >
           Purchase
@@ -46,10 +46,10 @@ const BuyCoin = () => {
           <FaCoins className="text-red-500 text-6xl mx-auto" />
         </div>
         <h2 className="text-3xl font-bold mb-4 text-red-700">1000</h2>
-        <p className="text-gray-700 mb-6">Pay $100</p>
+        <p className="text-gray-700 mb-6">Pay $10</p>
 
         <button
-          onClick={() => handlePurchase(100, 1000)}
+          onClick={() => handlePurchase(10, 1000)}
           className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
         >
           Purchase

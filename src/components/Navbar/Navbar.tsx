@@ -2,9 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
+import { useGetSingleUserQuery } from "../../redux/features/auth/authApi";
+import CountUp from "react-countup";
+import { FaCoins } from "react-icons/fa";
 
 const Navbar = () => {
-  const currentUser = useAppSelector((state) => state.auth.user);
+  const token = useAppSelector((state) => state.auth.user);
+  const { data } = useGetSingleUserQuery({ email: token?.email });
+  const currentUser = data?.data;
+
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -20,7 +26,9 @@ const Navbar = () => {
     <div className="navbar bg-base-200">
       <div className="navbar-start">
         <Link to={"/"}>
-          <a className="btn text-xl">Home</a>
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+            Home
+          </button>
         </Link>
       </div>
 
@@ -34,18 +42,31 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         <div className="flex items-center gap-5">
-          <p>Coin: {currentUser?.coin}</p>
+          <div className="flex items-center space-x-2 text-white bg-green-500 p-3 rounded-md">
+            <FaCoins className="text-yellow-400 text-2xl" />
+            <CountUp
+              end={currentUser?.coin}
+              duration={1}
+              className="text-xl font-semibold"
+            />
+          </div>
           <img
             className="size-14 rounded-full"
             src={currentUser?.photoURL}
             alt=""
           />
           {currentUser ? (
-            <button onClick={handleSignOut} className="btn">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSignOut}
+            >
               Logout
             </button>
           ) : (
-            <button onClick={handleGoogleSignIn} className="btn">
+            <button
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+              onClick={handleGoogleSignIn}
+            >
               Login
             </button>
           )}

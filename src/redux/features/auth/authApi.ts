@@ -9,7 +9,28 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+
+    getSingleUser: builder.query({
+      query: (queryParams) => ({
+        url: "/user/get-single-user",
+        method: "GET",
+        params: queryParams,
+      }),
+      providesTags: ["users"],
+    }),
+
+    updateCoin: builder.mutation({
+      query: (info) => ({
+        url: "/user/update-coin",
+        method: "PATCH",
+        body: info,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const {
+  useLoginMutation,
+  useGetSingleUserQuery,
+  useUpdateCoinMutation,
+} = authApi;

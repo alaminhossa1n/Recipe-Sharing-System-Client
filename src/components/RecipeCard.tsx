@@ -1,16 +1,21 @@
 import Swal from "sweetalert2";
-import { TRecipe, TUser } from "../interface/interface";
+import { TRecipe } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
+import {
+  useGetSingleUserQuery,
+  useUpdateCoinMutation,
+} from "../redux/features/auth/authApi";
 
 interface RecipeCardProps {
   recipe: TRecipe;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-  const currentUser = useAppSelector((state) => state.auth.user);
-
-  console.log(currentUser);
+  const token = useAppSelector((state) => state.auth.user);
+  const [updateCoin] = useUpdateCoinMutation();
+  const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
+  const currentUser = data?.data;
 
   const navigate = useNavigate();
 
@@ -20,11 +25,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       showDenyButton: true,
       confirmButtonText: "Yes",
       denyButtonText: `No`,
-    }).then((result) => {
+    }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         if (currentUser.coin > 10) {
-          navigate(`/recipe-details/${id}`);
+          const res = await updateCoin({
+            creatorEmail: recipe.creatorEmail,
+            viewerEmail: currentUser.email,
+            type: "normal",
+          }).unwrap();
+          if (res.success === true) {
+            navigate(`/recipe-details/${id}`);
+            refetch();
+          }
         } else {
           navigate(`/buy-coin`);
         }
@@ -32,8 +45,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         Swal.fire("Changes are not saved", "", "info");
       }
     });
-
-    console.log(id);
   };
 
   return (
