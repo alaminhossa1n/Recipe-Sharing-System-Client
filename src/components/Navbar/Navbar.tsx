@@ -8,7 +8,7 @@ const Navbar = () => {
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext);
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-200">
       <div className="navbar-start">
         <Link to={"/"}>
           <a className="btn text-xl">Home</a>

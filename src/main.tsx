@@ -6,6 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import AuthProvider from "./Providers/AuthProvider.tsx";
+import { Toaster } from "sonner";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
+      <Toaster />
     </Provider>
   </React.StrictMode>
 );
