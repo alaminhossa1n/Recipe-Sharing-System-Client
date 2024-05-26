@@ -1,4 +1,5 @@
 export type TRecipe = {
+  _id?: string;
   recipeName: string;
   recipeImage?: string;
   recipeDetails: string;

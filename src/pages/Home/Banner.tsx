@@ -28,17 +28,17 @@ const Banner = () => {
           "url('https://static.cordonbleu.edu/Files/MediaFile/63472.jpg')",
       }}
     >
-      <div className="bg-black bg-opacity-50 p-10 rounded-lg text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+      <div className="bg-black bg-opacity-50 p-6 md:p-10 rounded-lg text-center max-w-lg md:max-w-2xl mx-auto">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
           Discover Delicious Recipes
         </h1>
-        <p className="text-xl md:text-2xl text-white mb-8">
+        <p className="text-lg md:text-xl lg:text-2xl text-white mb-8">
           Cook, Share, and Enjoy with Our Community
         </p>
-        <div>
+        <div className="flex flex-col md:flex-row justify-center">
           <button
             onClick={handleSeeRecipes}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-4"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mb-4 md:mb-0 md:mr-4"
           >
             See Recipes
           </button>

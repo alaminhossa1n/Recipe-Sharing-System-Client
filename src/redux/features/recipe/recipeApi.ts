@@ -10,7 +10,29 @@ const recipeApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["recipes"],
     }),
+
+    getAllRecipe: builder.query({
+      query: (queryParams) => ({
+        url: "/recipe/all-recipe",
+        method: "GET",
+        params: queryParams,
+      }),
+      providesTags: ["recipes"],
+    }),
+
+    getSingleRecipe: builder.query({
+      query: (queryParams) => ({
+        url: `/recipe/single-recipe/${queryParams}`,
+        method: "GET",
+        params: queryParams,
+      }),
+      providesTags: ["recipes"],
+    }),
   }),
 });
 
-export const { useAddRecipeMutation } = recipeApi;
+export const {
+  useAddRecipeMutation,
+  useGetAllRecipeQuery,
+  useGetSingleRecipeQuery,
+} = recipeApi;

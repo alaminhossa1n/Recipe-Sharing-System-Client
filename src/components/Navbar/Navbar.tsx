@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
@@ -6,6 +6,15 @@ import { AuthContext } from "../../Providers/AuthProvider";
 const Navbar = () => {
   const currentUser = useAppSelector((state) => state.auth.user);
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleAddRecipes = () => {
+    if (currentUser) {
+      navigate("/add-recipe");
+    } else {
+      handleGoogleSignIn();
+    }
+  };
 
   return (
     <div className="navbar bg-base-200">
@@ -19,9 +28,9 @@ const Navbar = () => {
         <Link to={"recipes"}>
           <button className="btn btn-neutral">Recipes</button>
         </Link>
-        <Link to={"add-recipe"}>
-          <button className="btn btn-neutral">Add Recipes</button>
-        </Link>
+        <button onClick={handleAddRecipes} className="btn btn-neutral">
+          Add Recipes
+        </button>
       </div>
       <div className="navbar-end">
         <div className="flex items-center gap-5">
