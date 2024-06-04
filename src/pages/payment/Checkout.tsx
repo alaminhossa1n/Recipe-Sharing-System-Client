@@ -100,10 +100,10 @@ const Checkout = () => {
 
     if (confirmError) {
       setCardError(confirmError.message || "An unknown error occurred");
-      console.log(confirmError);
     } else {
       if (paymentIntent.status === "succeeded") {
         setPayLoading(true);
+
         const res = await updateCoin({
           viewerEmail: currentUser?.email,
           type: "buy",
@@ -166,6 +166,7 @@ const Checkout = () => {
           <button
             className="text-white font-bold py-2 px-4 rounded w-full btn btn-neutral"
             type="submit"
+            // disabled={!stripe || !clientSecret}
           >
             {payLoading ? (
               <span className="loading loading-spinner"></span>

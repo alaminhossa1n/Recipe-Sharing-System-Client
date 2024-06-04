@@ -36,9 +36,11 @@ const Navbar = () => {
         <Link to={"recipes"}>
           <button className="btn btn-neutral">Recipes</button>
         </Link>
-        <button onClick={handleAddRecipes} className="btn btn-neutral">
-          Add Recipes
-        </button>
+        {token && (
+          <button onClick={handleAddRecipes} className="btn btn-neutral">
+            Add Recipes
+          </button>
+        )}
       </div>
       <div className="navbar-end">
         <div className="flex items-center gap-5">

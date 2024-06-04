@@ -6,6 +6,7 @@ import {
   useGetSingleUserQuery,
   useUpdateCoinMutation,
 } from "../redux/features/auth/authApi";
+import { toast } from "sonner";
 
 interface RecipeCardProps {
   recipe: TRecipe;
@@ -19,7 +20,16 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
   const navigate = useNavigate();
 
-  const handleViewRecipe = (id) => {
+  const handleViewRecipe = (recipe) => {
+    console.log(recipe);
+    if (!token) {
+      toast.warning("To view recipe details, Please login First.");
+      return;
+    }
+    if (recipe.creatorEmail === currentUser.email) {
+      navigate(`/recipe-details/${recipe._id}`);
+      return;
+    }
     Swal.fire({
       title: "Do you want to spend 10 coin?",
       showDenyButton: true,
@@ -35,14 +45,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             type: "normal",
           }).unwrap();
           if (res.success === true) {
-            navigate(`/recipe-details/${id}`);
+            navigate(`/recipe-details/${recipe._id}`);
             refetch();
           }
         } else {
           navigate(`/buy-coin`);
         }
-      } else if (result.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
       }
     });
   };
@@ -70,7 +78,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         <div className="text-center mt-4">
           <button
             className="btn btn-neutral"
-            onClick={() => handleViewRecipe(recipe._id)}
+            onClick={() => handleViewRecipe(recipe)}
           >
             View The Recipe
           </button>
