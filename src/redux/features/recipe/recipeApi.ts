@@ -3,10 +3,10 @@ import { baseApi } from "../../api/baseApi";
 const recipeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addRecipe: builder.mutation({
-      query: (productInfo) => ({
+      query: (recipeInfo) => ({
         url: "/recipe/create-recipe",
         method: "POST",
-        body: productInfo,
+        body: recipeInfo,
       }),
       invalidatesTags: ["recipes"],
     }),
@@ -28,6 +28,15 @@ const recipeApi = baseApi.injectEndpoints({
       }),
       providesTags: ["recipes"],
     }),
+
+    updateRecipe: builder.mutation({
+      query: ({ id, recipeInfo }) => ({
+        url: `/recipe/update/${id}`,
+        method: "PATCH",
+        body: recipeInfo,
+      }),
+      invalidatesTags: ["recipes"],
+    }),
   }),
 });
 
@@ -35,4 +44,5 @@ export const {
   useAddRecipeMutation,
   useGetAllRecipeQuery,
   useGetSingleRecipeQuery,
+  useUpdateRecipeMutation
 } = recipeApi;

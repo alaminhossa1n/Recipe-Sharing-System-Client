@@ -7,6 +7,7 @@ import {
   useUpdateCoinMutation,
 } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
+import { useUpdateRecipeMutation } from "../redux/features/recipe/recipeApi";
 
 interface RecipeCardProps {
   recipe: TRecipe;
@@ -15,21 +16,32 @@ interface RecipeCardProps {
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const token = useAppSelector((state) => state.auth.user);
   const [updateCoin] = useUpdateCoinMutation();
+  const [updateRecipe] = useUpdateRecipeMutation();
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
   const currentUser = data?.data;
 
   const navigate = useNavigate();
 
   const handleViewRecipe = (recipe) => {
-    console.log(recipe);
     if (!token) {
       toast.warning("To view recipe details, Please login First.");
       return;
     }
+
     if (recipe.creatorEmail === currentUser.email) {
       navigate(`/recipe-details/${recipe._id}`);
       return;
     }
+
+    const parchedUser = recipe.purchased_by.find(
+      (n) => n === currentUser.email
+    );
+
+    if (parchedUser === currentUser.email) {
+      navigate(`/recipe-details/${recipe._id}`);
+      return;
+    }
+
     Swal.fire({
       title: "Do you want to spend 10 coin?",
       showDenyButton: true,
@@ -38,15 +50,22 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     }).then(async (result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        if (currentUser.coin > 10) {
+        if (currentUser.coin >= 10) {
           const res = await updateCoin({
             creatorEmail: recipe.creatorEmail,
             viewerEmail: currentUser.email,
             type: "normal",
           }).unwrap();
           if (res.success === true) {
-            navigate(`/recipe-details/${recipe._id}`);
-            refetch();
+            const res = await updateRecipe({
+              id: recipe._id,
+              recipeInfo: { email: currentUser.email },
+            });
+            if (res.data.success === true) {
+              toast.success("Now you have access of this recipe");
+              navigate(`/recipe-details/${recipe._id}`);
+              refetch();
+            }
           }
         } else {
           navigate(`/buy-coin`);
