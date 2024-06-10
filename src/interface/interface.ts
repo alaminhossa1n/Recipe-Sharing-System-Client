@@ -6,7 +6,7 @@ export type TRecipe = {
   video?: string;
   country: string;
   category: string;
-  purchased_by?: string;
+  purchased_by?: string[];
   creatorEmail: string;
 };
 

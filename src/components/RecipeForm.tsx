@@ -4,20 +4,22 @@ import { TRecipe, TUser } from "../interface/interface";
 import { toast } from "sonner";
 import { useAppSelector } from "../redux/hooks";
 
-const RecipeForm = () => {
+const RecipeForm: React.FC = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm<TRecipe>();
 
   const [addRecipe] = useAddRecipeMutation();
-  const currentUser: TUser = useAppSelector((state) => state.auth.user);
+  const currentUser: Partial<TUser> | null = useAppSelector(
+    (state) => state.auth.user
+  );
   console.log(currentUser);
 
-  const onSubmit: SubmitHandler<TRecipe> = async (data) => {
-    data.creatorEmail = currentUser.email;
+  const onSubmit: SubmitHandler<TRecipe> = async (data: Partial<TRecipe>) => {
+    data.creatorEmail = currentUser?.email;
 
     try {
       const res = await addRecipe(data).unwrap();

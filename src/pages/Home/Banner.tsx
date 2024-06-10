@@ -5,7 +5,7 @@ import { useAppSelector } from "../../redux/hooks";
 
 const Banner = () => {
   const currentUser = useAppSelector((state) => state.auth.user);
-  const { handleGoogleSignIn } = useContext(AuthContext);
+  const { handleGoogleSignIn } = useContext(AuthContext)!;
   const navigate = useNavigate();
 
   const handleSeeRecipes = () => {

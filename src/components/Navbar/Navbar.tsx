@@ -5,13 +5,16 @@ import { AuthContext } from "../../Providers/AuthProvider";
 import { useGetSingleUserQuery } from "../../redux/features/auth/authApi";
 import CountUp from "react-countup";
 import { FaCoins } from "react-icons/fa";
+import { TUser } from "../../interface/interface";
 
 const Navbar = () => {
-  const token = useAppSelector((state) => state.auth.user);
+  const token: Partial<TUser> | null = useAppSelector(
+    (state) => state.auth.user
+  );
   const { data } = useGetSingleUserQuery({ email: token?.email });
   const currentUser = data?.data;
 
-  const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext);
+  const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext)!;
   const navigate = useNavigate();
 
   const handleAddRecipes = () => {

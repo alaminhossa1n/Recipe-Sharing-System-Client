@@ -1,4 +1,5 @@
-import { createContext } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReactNode, createContext } from "react";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -12,12 +13,23 @@ import { useAppDispatch } from "../redux/hooks";
 import app from "../firebase/firebase.init";
 import { logout, setToken } from "../redux/features/auth/authSlice";
 
-export const AuthContext = createContext(null);
+interface AuthContextType {
+  handleGoogleSignIn: () => Promise<void>;
+  handleSignOut: () => void;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 
-const AuthProvider = ({ children }) => {
+interface Tprops {
+  children: ReactNode;
+}
+
+const AuthProvider: React.FC<Tprops> = ({ children }) => {
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
 
@@ -61,7 +73,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo as any}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

@@ -1,7 +1,12 @@
 import { Navigate } from "react-router";
 import { useAppSelector } from "../redux/hooks";
+import { ReactNode } from "react";
 
-const PrivateRoute = ({ children }) => {
+interface Tprops {
+  children: ReactNode;
+}
+
+const PrivateRoute: React.FC<Tprops> = ({ children }) => {
   const token = useAppSelector((state) => state.auth.user);
 
   if (token) {

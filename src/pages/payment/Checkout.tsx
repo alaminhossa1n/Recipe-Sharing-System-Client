@@ -7,9 +7,12 @@ import {
   useUpdateCoinMutation,
 } from "../../redux/features/auth/authApi";
 import Swal from "sweetalert2";
+import { TUser } from "../../interface/interface";
 
 const Checkout = () => {
-  const token = useAppSelector((state) => state.auth.user);
+  const token: Partial<TUser> | null = useAppSelector(
+    (state) => state.auth.user
+  );
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
   const currentUser = data?.data;
   const [updateCoin] = useUpdateCoinMutation();
@@ -37,7 +40,7 @@ const Checkout = () => {
         body: JSON.stringify({ price }),
       })
         .then((response) => {
-          console.log("Response received from server:", response);
+          // console.log("Response received from server:", response);
           if (!response.ok) {
             return response.text().then((text) => {
               throw new Error(`Network response was not ok: ${text}`);
@@ -70,7 +73,7 @@ const Checkout = () => {
       return;
     }
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -79,7 +82,7 @@ const Checkout = () => {
       setCardError(error.message || "An unknown error occurred");
     } else {
       setCardError(null);
-      console.log("payment method", paymentMethod);
+      // console.log("payment method", paymentMethod);
     }
 
     if (!clientSecret) {
@@ -109,18 +112,21 @@ const Checkout = () => {
           type: "buy",
           coin,
         }).unwrap();
-        setPayLoading(false);
 
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Payment Successful",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        refetch();
+        if (res.success === true) {
+          setPayLoading(false);
 
-        navigate("/");
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Payment Successful",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          refetch();
+
+          navigate("/");
+        }
       }
     }
   };

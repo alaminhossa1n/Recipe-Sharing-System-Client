@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { TRecipe } from "../interface/interface";
+import { TRecipe, TUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 import {
@@ -14,7 +14,9 @@ interface RecipeCardProps {
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
-  const token = useAppSelector((state) => state.auth.user);
+  const token: Partial<TUser | null> = useAppSelector(
+    (state) => state.auth.user
+  );
   const [updateCoin] = useUpdateCoinMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
@@ -22,7 +24,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
   const navigate = useNavigate();
 
-  const handleViewRecipe = (recipe) => {
+  const handleViewRecipe = (recipe: TRecipe) => {
     if (!token) {
       toast.warning("To view recipe details, Please login First.");
       return;
@@ -33,9 +35,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       return;
     }
 
-    const parchedUser = recipe.purchased_by.find(
-      (n) => n === currentUser.email
-    );
+    const parchedUser = recipe.purchased_by
+      ? recipe.purchased_by.find((n) => n === currentUser.email)
+      : undefined;
 
     if (parchedUser === currentUser.email) {
       navigate(`/recipe-details/${recipe._id}`);
