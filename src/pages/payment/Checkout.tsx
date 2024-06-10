@@ -32,13 +32,16 @@ const Checkout = () => {
 
   useEffect(() => {
     if (price > 0) {
-      fetch("http://localhost:5000/api/payment/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ price }),
-      })
+      fetch(
+        "https://recipe-sharing-system-server.vercel.app/api/payment/create-payment-intent",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ price }),
+        }
+      )
         .then((response) => {
           // console.log("Response received from server:", response);
           if (!response.ok) {
