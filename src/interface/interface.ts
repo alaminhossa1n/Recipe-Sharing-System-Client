@@ -7,6 +7,7 @@ export type TRecipe = {
   country: string;
   category: string;
   purchased_by?: string[];
+  reactions?: string[];
   creatorEmail: string;
 };
 

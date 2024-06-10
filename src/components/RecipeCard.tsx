@@ -8,6 +8,7 @@ import {
 } from "../redux/features/auth/authApi";
 import { toast } from "sonner";
 import { useUpdateRecipeMutation } from "../redux/features/recipe/recipeApi";
+import { useState } from "react";
 
 interface RecipeCardProps {
   recipe: TRecipe;
@@ -20,6 +21,8 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const [updateCoin] = useUpdateCoinMutation();
   const [updateRecipe] = useUpdateRecipeMutation();
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
+  const [hasReacted, setHasReacted] = useState(false);
+  const [reactionCount, setReactionCount] = useState(0);
   const currentUser = data?.data;
 
   const navigate = useNavigate();
@@ -76,6 +79,27 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     });
   };
 
+  const handleReactionClick = async () => {
+    if (!currentUser) {
+      toast.warning("You need to be logged in to react.");
+      return;
+    }
+
+    // const updatedReactions = hasReacted
+    //   ? recipe.reactions.filter((email) => email !== currentUser.email)
+    //   : [...recipe.reactions, currentUser.email];
+
+    // try {
+    //   await updateRecipe({
+    //     id: recipe._id,
+    //     recipeInfo: { reactions: updatedReactions },
+    //   }).unwrap();
+    //   setHasReacted(!hasReacted);
+    // } catch (error) {
+    //   toast.error("Failed to update reaction.");
+    // }
+  };
+
   return (
     <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
       <img
@@ -88,7 +112,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           {recipe.recipeName}
         </h2>
         <p className="text-gray-700 mb-1">
-          <strong>Purchased By:</strong> {recipe.purchased_by}
+          <strong>Purchased By:</strong> {recipe.purchased_by.join(", ")}
         </p>
         <p className="text-gray-700 mb-1">
           <strong>Creator Email:</strong> {recipe.creatorEmail}
@@ -96,13 +120,22 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
         <p className="text-gray-700 mb-1">
           <strong>Country:</strong> {recipe.country}
         </p>
-        <div className="text-center mt-4">
+        <div className="flex justify-between items-center mt-4">
           <button
             className="btn btn-neutral"
             onClick={() => handleViewRecipe(recipe)}
           >
             View The Recipe
           </button>
+          <div className="flex items-center">
+            <button
+              className={`btn ${hasReacted ? "text-primary" : "text-gray-400"}`}
+              onClick={handleReactionClick}
+            >
+              👍
+            </button>
+            <span className="ml-2 text-gray-700">{reactionCount}</span>
+          </div>
         </div>
       </div>
     </div>
