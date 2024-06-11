@@ -2,6 +2,8 @@ import Swal from "sweetalert2";
 import { TRecipe, TUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
+import { BiSolidLike } from "react-icons/bi";
+
 import {
   useGetSingleUserQuery,
   useUpdateCoinMutation,
@@ -128,12 +130,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             View The Recipe
           </button>
           <div className="flex items-center">
-            <button
-              className={`btn ${hasReacted ? "text-primary" : "text-gray-400"}`}
-              onClick={handleReactionClick}
-            >
-              👍
-            </button>
+            <p className={`cursor-pointer text-2xl text-blue-500`} onClick={handleReactionClick}>
+              <BiSolidLike />
+            </p>
             <span className="ml-2 text-gray-700">{reactionCount}</span>
           </div>
         </div>
