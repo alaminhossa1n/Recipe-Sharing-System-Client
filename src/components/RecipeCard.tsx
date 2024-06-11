@@ -3,14 +3,13 @@ import { TRecipe, TUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 import { BiSolidLike } from "react-icons/bi";
-
-import {
-  useGetSingleUserQuery,
-  useUpdateCoinMutation,
-} from "../redux/features/auth/authApi";
 import { toast } from "sonner";
-import { useUpdateRecipeMutation } from "../redux/features/recipe/recipeApi";
-import { useState } from "react";
+import { useGetSingleUserQuery } from "../redux/features/auth/authApi";
+import {
+  useReactRecipeMutation,
+  useViewRecipeMutation,
+} from "../redux/features/recipe/recipeApi";
+import { FaEye } from "react-icons/fa";
 
 interface RecipeCardProps {
   recipe: TRecipe;
@@ -20,11 +19,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const token: Partial<TUser | null> = useAppSelector(
     (state) => state.auth.user
   );
-  const [updateCoin] = useUpdateCoinMutation();
-  const [updateRecipe] = useUpdateRecipeMutation();
+  const [viewRecipe] = useViewRecipeMutation();
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
-  const [hasReacted, setHasReacted] = useState(false);
-  const [reactionCount, setReactionCount] = useState(0);
+  const [reactRecipe] = useReactRecipeMutation();
   const currentUser = data?.data;
 
   const navigate = useNavigate();
@@ -58,21 +55,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         if (currentUser.coin >= 10) {
-          const res = await updateCoin({
-            creatorEmail: recipe.creatorEmail,
-            viewerEmail: currentUser.email,
-            type: "normal",
+          const res = await viewRecipe({
+            id: recipe._id,
+            recipeInfo: {
+              viewerEmail: currentUser.email,
+              creatorEmail: recipe.creatorEmail,
+            },
           }).unwrap();
+
+          console.log(res);
           if (res.success === true) {
-            const res = await updateRecipe({
-              id: recipe._id,
-              recipeInfo: { email: currentUser.email },
-            });
-            if (res.data.success === true) {
-              toast.success("Now you have access of this recipe");
-              navigate(`/recipe-details/${recipe._id}`);
-              refetch();
-            }
+            toast.success("Now you have access of this recipe");
+            navigate(`/recipe-details/${recipe._id}`);
+            refetch();
           }
         } else {
           navigate(`/buy-coin`);
@@ -87,19 +82,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       return;
     }
 
-    // const updatedReactions = hasReacted
-    //   ? recipe.reactions.filter((email) => email !== currentUser.email)
-    //   : [...recipe.reactions, currentUser.email];
-
-    // try {
-    //   await updateRecipe({
-    //     id: recipe._id,
-    //     recipeInfo: { reactions: updatedReactions },
-    //   }).unwrap();
-    //   setHasReacted(!hasReacted);
-    // } catch (error) {
-    //   toast.error("Failed to update reaction.");
-    // }
+    const res = await reactRecipe({
+      recipeId: recipe._id,
+      viewerEmail: currentUser?.email,
+    });
+    console.log(currentUser?.email);
+    console.log(res.data);
   };
 
   return (
@@ -114,7 +102,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           {recipe.recipeName}
         </h2>
         <p className="text-gray-700 mb-1">
-          <strong>Purchased By:</strong> {recipe.purchased_by.join(", ")}
+          <strong>Purchased By:</strong> {recipe?.purchased_by?.join(", ")}
         </p>
         <p className="text-gray-700 mb-1">
           <strong>Creator Email:</strong> {recipe.creatorEmail}
@@ -130,10 +118,26 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             View The Recipe
           </button>
           <div className="flex items-center">
-            <p className={`cursor-pointer text-2xl text-blue-500`} onClick={handleReactionClick}>
+            <p className={`text-2xl text-blue-500`}>
+              <FaEye />
+            </p>
+            <span className="ml-2 text-gray-700">{recipe?.watchCount}</span>
+          </div>
+
+          <div className="flex items-center">
+            <p
+              className={`cursor-pointer text-2xl ${
+                recipe.reactors?.includes(currentUser.email)
+                  ? "text-blue-500"
+                  : ""
+              }`}
+              onClick={handleReactionClick}
+            >
               <BiSolidLike />
             </p>
-            <span className="ml-2 text-gray-700">{reactionCount}</span>
+            <span className="ml-2 text-gray-700">
+              {recipe.reactors?.length}
+            </span>
           </div>
         </div>
       </div>

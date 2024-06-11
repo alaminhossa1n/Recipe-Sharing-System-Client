@@ -9,6 +9,7 @@ export type TRecipe = {
   purchased_by?: string[];
   reactors?: string[];
   creatorEmail: string;
+  watchCount: number;
 };
 
 export type TUser = {

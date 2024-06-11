@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  useBuyCoinMutation,
   useGetSingleUserQuery,
-  useUpdateCoinMutation,
 } from "../../redux/features/auth/authApi";
 import Swal from "sweetalert2";
 import { TUser } from "../../interface/interface";
@@ -15,7 +15,7 @@ const Checkout = () => {
   );
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
   const currentUser = data?.data;
-  const [updateCoin] = useUpdateCoinMutation();
+  const [buyCoin] = useBuyCoinMutation();
   const [payLoading, setPayLoading] = useState(false);
 
   const location = useLocation();
@@ -110,9 +110,8 @@ const Checkout = () => {
       if (paymentIntent.status === "succeeded") {
         setPayLoading(true);
 
-        const res = await updateCoin({
+        const res = await buyCoin({
           viewerEmail: currentUser?.email,
-          type: "buy",
           coin,
         }).unwrap();
 

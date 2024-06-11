@@ -29,11 +29,20 @@ const recipeApi = baseApi.injectEndpoints({
       providesTags: ["recipes"],
     }),
 
-    updateRecipe: builder.mutation({
+    viewRecipe: builder.mutation({
       query: ({ id, recipeInfo }) => ({
-        url: `/recipe/update/${id}`,
+        url: `/recipe/view-recipe/${id}`,
         method: "PATCH",
         body: recipeInfo,
+      }),
+      invalidatesTags: ["recipes"],
+    }),
+
+    reactRecipe: builder.mutation({
+      query: ({ recipeId, viewerEmail }) => ({
+        url: `/recipe/react-recipe/${recipeId}`,
+        method: "PATCH",
+        body: {viewerEmail},
       }),
       invalidatesTags: ["recipes"],
     }),
@@ -44,5 +53,6 @@ export const {
   useAddRecipeMutation,
   useGetAllRecipeQuery,
   useGetSingleRecipeQuery,
-  useUpdateRecipeMutation
+  useViewRecipeMutation,
+  useReactRecipeMutation
 } = recipeApi;
