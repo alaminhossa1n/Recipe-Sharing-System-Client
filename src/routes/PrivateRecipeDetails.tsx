@@ -16,7 +16,6 @@ const PrivateRecipeDetails: React.FC<Tprops> = ({ children }) => {
   );
   const { id } = useParams<{ id: string }>();
 
-  console.log(token);
   const { data: user, isLoading: userLoading } = useGetSingleUserQuery({
     email: token?.email,
   });

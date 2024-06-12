@@ -29,7 +29,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   );
   const navigate = useNavigate();
 
-  const handleViewRecipe = (recipe: TRecipe) => {
+  const handleViewRecipe = async (recipe: TRecipe) => {
     if (!token) {
       toast.warning("To view recipe details, Please login First.");
       return;
@@ -37,6 +37,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
     if (recipe.creatorEmail === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
+      const res = await viewRecipe({
+        id: recipe._id,
+        recipeInfo: {},
+      }).unwrap();
       return;
     }
 
@@ -46,6 +50,10 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
     if (parchedUser === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
+      const res = await viewRecipe({
+        id: recipe._id,
+        recipeInfo: {},
+      }).unwrap();
       return;
     }
 
@@ -66,7 +74,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
             },
           }).unwrap();
 
-          console.log(res);
           if (res.success === true) {
             toast.success("Now you have access of this recipe");
             navigate(`/recipe-details/${recipe._id}`);
