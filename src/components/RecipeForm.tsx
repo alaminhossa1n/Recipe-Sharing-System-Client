@@ -16,11 +16,23 @@ const RecipeForm: React.FC = () => {
   const currentUser: Partial<TUser> | null = useAppSelector(
     (state) => state.auth.user
   );
-  console.log(currentUser);
 
   const onSubmit: SubmitHandler<TRecipe> = async (data: Partial<TRecipe>) => {
     data.creatorEmail = currentUser?.email;
 
+    const formData = new FormData();
+
+    // Append the image if it exists
+    if (data.recipeImage && data.recipeImage[0]) {
+      formData.append("image", data.recipeImage[0]);
+    }
+
+    // Append other required fields
+    formData.append("recipeName", data.recipeName || "");
+    formData.append("recipeDetails", data.recipeDetails || "");
+    formData.append("country", data.country || "");
+    formData.append("category", data.category || "");
+    formData.append("creatorEmail", data.creatorEmail || "");
     try {
       const res = await addRecipe(data).unwrap();
       if (res.success === true) {
@@ -54,7 +66,7 @@ const RecipeForm: React.FC = () => {
         <div className="mb-4">
           <label className="block text-gray-700">Recipe Image URL</label>
           <input
-            type="text"
+            type="file"
             {...register("recipeImage", {
               required: "Recipe image URL is required",
             })}

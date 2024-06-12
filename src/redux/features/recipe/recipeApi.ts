@@ -54,5 +54,5 @@ export const {
   useGetAllRecipeQuery,
   useGetSingleRecipeQuery,
   useViewRecipeMutation,
-  useReactRecipeMutation,
+  useReactRecipeMutation
 } = recipeApi;
