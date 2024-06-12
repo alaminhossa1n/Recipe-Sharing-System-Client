@@ -10,6 +10,7 @@ import {
   useViewRecipeMutation,
 } from "../redux/features/recipe/recipeApi";
 import { FaEye } from "react-icons/fa";
+import { useState } from "react";
 
 interface RecipeCardProps {
   recipe: TRecipe;
@@ -23,7 +24,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
   const [reactRecipe] = useReactRecipeMutation();
   const currentUser = data?.data;
-
+  const [isReact, setIsReact] = useState(
+    recipe.reactors?.includes(currentUser?.email) ? true : false
+  );
   const navigate = useNavigate();
 
   const handleViewRecipe = (recipe: TRecipe) => {
@@ -32,16 +35,16 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       return;
     }
 
-    if (recipe.creatorEmail === currentUser.email) {
+    if (recipe.creatorEmail === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
       return;
     }
 
     const parchedUser = recipe.purchased_by
-      ? recipe.purchased_by.find((n) => n === currentUser.email)
+      ? recipe.purchased_by.find((n) => n === currentUser?.email)
       : undefined;
 
-    if (parchedUser === currentUser.email) {
+    if (parchedUser === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
       return;
     }
@@ -85,9 +88,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
     const res = await reactRecipe({
       recipeId: recipe._id,
       viewerEmail: currentUser?.email,
+      state: !isReact,
     });
-    console.log(currentUser?.email);
-    console.log(res.data);
+    setIsReact(!isReact);
   };
 
   return (
@@ -127,7 +130,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
           <div className="flex items-center">
             <p
               className={`cursor-pointer text-2xl ${
-                recipe.reactors?.includes(currentUser.email)
+                recipe.reactors?.includes(currentUser?.email)
                   ? "text-blue-500"
                   : ""
               }`}
