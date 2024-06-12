@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Swal from "sweetalert2";
 import { TRecipe, TUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
