@@ -8,6 +8,6 @@ export const baseApi = createApi({
     // http://localhost:5000/
     credentials: "include",
   }),
-  tagTypes: ["recipes", "users"],
+  tagTypes: ["recipes", "users", "categories"],
   endpoints: () => ({}),
 });
