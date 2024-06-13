@@ -33,8 +33,9 @@ const RecipeForm: React.FC = () => {
     formData.append("country", data.country || "");
     formData.append("category", data.category || "");
     formData.append("creatorEmail", data.creatorEmail || "");
+    
     try {
-      const res = await addRecipe(data).unwrap();
+      const res = await addRecipe(formData).unwrap();
       if (res.success === true) {
         toast.success("Product Added Successfully!");
         console.log(res);
