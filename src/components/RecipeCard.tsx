@@ -25,6 +25,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const { data, refetch } = useGetSingleUserQuery({ email: token?.email });
   const [reactRecipe] = useReactRecipeMutation();
   const currentUser = data?.data;
+
   const [isReact, setIsReact] = useState(
     recipe.reactors?.includes(currentUser?.email) ? true : false
   );
