@@ -61,18 +61,18 @@ const Recipes: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-4">
       <div className="my-4 w-full flex justify-center">
         <input
           type="text"
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search by name"
-          className="w-1/2 mx-auto px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          className="w-full sm:w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
         />
       </div>
-      <div className="flex w-1/2 justify-between mx-auto">
-        <div className="mb-4">
+      <div className="flex flex-col sm:flex-row w-full sm:w-1/2 justify-between mx-auto">
+        <div className="mb-4 sm:mb-0 sm:mr-2">
           <label className="block text-gray-700">Category</label>
           <select
             value={selectedCategory}
@@ -91,7 +91,7 @@ const Recipes: React.FC = () => {
           </select>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 sm:mb-0 sm:ml-2">
           <label className="block text-gray-700">Country</label>
           <select
             value={selectedCountry}
@@ -111,7 +111,7 @@ const Recipes: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-10">
         {recipes &&
           recipes.map((recipe: TRecipe, i: number) => (
             <RecipeCard key={i} recipe={recipe} />

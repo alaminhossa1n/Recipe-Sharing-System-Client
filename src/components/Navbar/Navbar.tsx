@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { useGetSingleUserQuery } from "../../redux/features/auth/authApi";
 import CountUp from "react-countup";
@@ -17,6 +17,24 @@ const Navbar = () => {
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext)!;
   const navigate = useNavigate();
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleAddRecipes = () => {
     if (currentUser) {
       navigate("/add-recipe");
@@ -26,7 +44,11 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-base-200">
+    <nav
+      className={`navbar fixed top-0 z-50 transition-all duration-300 text-white font-bold py-4 w-full ${
+        isScrolled ? "backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
       <div className="navbar-start">
         <Link to={"/"}>
           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
@@ -77,7 +99,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
