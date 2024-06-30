@@ -61,7 +61,7 @@ const Recipes: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 mt-28">
       <div className="my-4 w-full flex justify-center">
         <input
           type="text"
@@ -111,7 +111,7 @@ const Recipes: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-10 mt-10">
         {recipes &&
           recipes.map((recipe: TRecipe, i: number) => (
             <RecipeCard key={i} recipe={recipe} />
