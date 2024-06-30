@@ -65,6 +65,7 @@ const Checkout = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setPayLoading(true)
 
     if (!stripe || !elements) {
       return;
@@ -108,8 +109,6 @@ const Checkout = () => {
       setCardError(confirmError.message || "An unknown error occurred");
     } else {
       if (paymentIntent.status === "succeeded") {
-        setPayLoading(true);
-
         const res = await buyCoin({
           viewerEmail: currentUser?.email,
           coin,
