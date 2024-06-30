@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Swal from "sweetalert2";
 import { TRecipe, TUser } from "../interface/interface";
 import { useNavigate } from "react-router-dom";
@@ -39,10 +38,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
     if (recipe.creatorEmail === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
-      const res = await viewRecipe({
+      await viewRecipe({
         id: recipe._id,
         recipeInfo: {},
       }).unwrap();
+
       return;
     }
 
@@ -52,7 +52,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
     if (parchedUser === currentUser?.email) {
       navigate(`/recipe-details/${recipe._id}`);
-      const res = await viewRecipe({
+      await viewRecipe({
         id: recipe._id,
         recipeInfo: {},
       }).unwrap();
@@ -94,7 +94,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
       return;
     }
 
-    const res = await reactRecipe({
+    await reactRecipe({
       recipeId: recipe._id,
       viewerEmail: currentUser?.email,
       state: !isReact,
