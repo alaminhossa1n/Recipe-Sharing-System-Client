@@ -27,8 +27,21 @@ const RecipeForm: React.FC = () => {
   const onSubmit: SubmitHandler<TRecipe> = async (data: Partial<TRecipe>) => {
     data.creatorEmail = currentUser?.email;
 
-    const formData = new FormData();
+    const getVideoId = (url: string) => {
+      try {
+        const urlObj = new URL(url);
+        const pathname = urlObj.pathname;
+        const videoId = pathname.split("/")[1];
+        return videoId;
+      } catch (error) {
+        console.error("Invalid URL:", error);
+        return null;
+      }
+    };
+    const videoId = getVideoId(data.video as string);
+    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
 
+    const formData = new FormData();
     // Append the image if it exists
     if (data.recipeImage && data.recipeImage[0]) {
       formData.append("image", data.recipeImage[0]);
@@ -36,23 +49,22 @@ const RecipeForm: React.FC = () => {
 
     // Append other required fields
     formData.append("recipeName", data.recipeName || "");
-    formData.append("recipeDetails", data.recipeDetails || "");
-    formData.append("country", data.country || "");
     formData.append("category", data.category || "");
+    formData.append("country", data.country || "");
+    formData.append("video", embedUrl || "");
+    formData.append("recipeDetails", data.recipeDetails || "");
     formData.append("creatorEmail", data.creatorEmail || "");
-    
+
     try {
       const res = await addRecipe(formData).unwrap();
       if (res.success === true) {
         toast.success("Product Added Successfully!");
-        console.log(res);
+        // console.log(res);
         reset();
       }
     } catch (err) {
       toast.error("Failed to add product");
     }
-
-    console.log(data);
   };
 
   return (
