@@ -4,7 +4,7 @@ const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (userInfo) => ({
-        url: "/user/create-user ",
+        url: "/auth/google-signin ",
         method: "POST",
         body: userInfo,
       }),

@@ -8,6 +8,8 @@ import RecipeDetails from "../pages/recipes/RecipeDetails";
 import BuyCoin from "../pages/payment/BuyCoin";
 import PrivateRoute from "./PrivateRoute";
 import PrivateRecipeDetails from "./PrivateRecipeDetails";
+import Login from "../pages/Authentication/Login";
+import Registration from "../pages/Authentication/Registration";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Registration />,
       },
       {
         path: "/recipes",
