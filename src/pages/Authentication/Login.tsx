@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { Link } from "react-router-dom";
+import { useLoginMutation } from "../../redux/features/auth/authApi";
 
 const Login = () => {
   const { handleGoogleSignIn } = useContext(AuthContext)!;
+  const [login] = useLoginMutation();
 
   const {
     register,
@@ -13,9 +15,9 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data: ", data);
-    // Handle your login logic here
+  const onSubmit = async (data) => {
+    const res = await login(data).unwrap();
+    console.log(res);
   };
 
   return (

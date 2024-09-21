@@ -2,9 +2,25 @@ import { baseApi } from "../../api/baseApi";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    googleLogin: builder.mutation({
+      query: (userInfo) => ({
+        url: "/auth/google-signin",
+        method: "POST",
+        body: userInfo,
+      }),
+    }),
+
+    registration: builder.mutation({
+      query: (userInfo) => ({
+        url: "/user/create-user",
+        method: "POST",
+        body: userInfo,
+      }),
+    }),
+
     login: builder.mutation({
       query: (userInfo) => ({
-        url: "/auth/google-signin ",
+        url: "/auth/signin",
         method: "POST",
         body: userInfo,
       }),
@@ -29,5 +45,10 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useGetSingleUserQuery, useBuyCoinMutation } =
-  authApi;
+export const {
+  useGoogleLoginMutation,
+  useLoginMutation,
+  useRegistrationMutation,
+  useGetSingleUserQuery,
+  useBuyCoinMutation,
+} = authApi;

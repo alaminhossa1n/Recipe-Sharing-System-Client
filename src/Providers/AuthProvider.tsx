@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 
 import { jwtDecode } from "jwt-decode";
-import { useLoginMutation } from "../redux/features/auth/authApi";
+import { useGoogleLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import app from "../firebase/firebase.init";
 import { logout, setToken } from "../redux/features/auth/authSlice";
@@ -30,7 +30,7 @@ interface Tprops {
 }
 
 const AuthProvider: React.FC<Tprops> = ({ children }) => {
-  const [login] = useLoginMutation();
+  const [googleLogin] = useGoogleLoginMutation();
   const dispatch = useAppDispatch();
 
   const handleGoogleSignIn = async () => {
@@ -42,11 +42,10 @@ const AuthProvider: React.FC<Tprops> = ({ children }) => {
         displayName: user?.displayName,
         photoURL: user?.photoURL,
         email: user?.email,
-        coin: 50,
       };
 
       try {
-        const res = await login(postData).unwrap();
+        const res = await googleLogin(postData).unwrap();
         const userDecoded = jwtDecode(res.data.token);
         dispatch(setToken({ user: userDecoded, token: res.data.token }));
       } catch (err) {
