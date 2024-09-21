@@ -4,10 +4,14 @@ import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../Providers/AuthProvider";
 import { Link } from "react-router-dom";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
+import { jwtDecode } from "jwt-decode";
+import { setToken } from "../../redux/features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 const Login = () => {
   const { handleGoogleSignIn } = useContext(AuthContext)!;
   const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -17,7 +21,11 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const res = await login(data).unwrap();
-    console.log(res);
+    if (res.success === true) {
+      console.log(res.data.data.token);
+      const userDecoded = jwtDecode(res.data.token);
+      dispatch(setToken({ user: userDecoded, token: res.data.data.token }));
+    }
   };
 
   return (

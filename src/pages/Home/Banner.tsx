@@ -1,11 +1,8 @@
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Providers/AuthProvider";
 import { useAppSelector } from "../../redux/hooks";
 
 const Banner = () => {
   const currentUser = useAppSelector((state) => state.auth.user);
-  const { handleGoogleSignIn } = useContext(AuthContext)!;
   const navigate = useNavigate();
 
   const handleSeeRecipes = () => {
@@ -16,7 +13,7 @@ const Banner = () => {
     if (currentUser) {
       navigate("/add-recipe");
     } else {
-      handleGoogleSignIn();
+      navigate("/login");
     }
   };
 

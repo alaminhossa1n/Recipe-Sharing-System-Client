@@ -12,6 +12,7 @@ import { useGoogleLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import app from "../firebase/firebase.init";
 import { logout, setToken } from "../redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 interface AuthContextType {
   handleGoogleSignIn: () => Promise<void>;
@@ -32,7 +33,6 @@ interface Tprops {
 const AuthProvider: React.FC<Tprops> = ({ children }) => {
   const [googleLogin] = useGoogleLoginMutation();
   const dispatch = useAppDispatch();
-
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -46,8 +46,12 @@ const AuthProvider: React.FC<Tprops> = ({ children }) => {
 
       try {
         const res = await googleLogin(postData).unwrap();
-        const userDecoded = jwtDecode(res.data.token);
-        dispatch(setToken({ user: userDecoded, token: res.data.token }));
+        if (res.success === true) {
+          const userDecoded = jwtDecode(res.data.token);
+          dispatch(setToken({ user: userDecoded, token: res.data.token }));
+          toast.success("Login Successful.");
+          window.location.href = '/';
+        }
       } catch (err) {
         console.log("Error during login:", err);
       }

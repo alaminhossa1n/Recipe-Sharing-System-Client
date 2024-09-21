@@ -1,16 +1,46 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegistrationMutation } from "../../redux/features/auth/authApi";
+import { jwtDecode } from "jwt-decode";
+import { useAppDispatch } from "../../redux/hooks";
+import { setToken } from "../../redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 const Registration = () => {
+  const [registration] = useRegistrationMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data: ", data);
-    // Handle your registration logic here
+  const onSubmit = async (data) => {
+    try {
+      const res = await registration(data).unwrap();
+
+      if (res.success) {
+        console.log(res.data.token);
+        toast.success("Registration Successful.");
+        navigate("/");
+        const userDecoded = jwtDecode(res.data.token);
+        dispatch(setToken({ user: userDecoded, token: res.data.token }));
+      } else {
+        console.log("Unexpected response:", res.data);
+      }
+    } catch (error) {
+      // Handle 409 Conflict error
+      if (error.status === 409) {
+        console.log("Error: This email is already registered.");
+        // Display error message to the user or handle it accordingly
+        toast.error("This email is already registered.");
+      } else {
+        console.error("Error:", error);
+        // Display a general error message if it's not a 409 error
+        alert("Something went wrong. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -32,7 +62,9 @@ const Registration = () => {
               placeholder="Enter your name"
             />
             {errors.displayName && (
-              <p className="text-red-500 text-sm mt-1">{errors.displayName.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.displayName.message}
+              </p>
             )}
           </div>
 
