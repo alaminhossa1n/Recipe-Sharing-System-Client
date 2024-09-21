@@ -1,12 +1,11 @@
-
-import MainContainer from "./components/MainContainer";
+import MainContainer from "./components/MainContainer"
 
 function App() {
-  return (
-    <>
-      <MainContainer/>
-    </>
-  );
+	return (
+		<>
+			<MainContainer />
+		</>
+	)
 }
 
-export default App;
+export default App

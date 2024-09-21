@@ -1,11 +1,11 @@
-import RecipeForm from "../../components/RecipeForm";
+import RecipeForm from "../../components/RecipeForm"
 
 const AddRecipe = () => {
-  return (
-    <div>
-      <RecipeForm />
-    </div>
-  );
-};
+	return (
+		<div>
+			<RecipeForm />
+		</div>
+	)
+}
 
-export default AddRecipe;
+export default AddRecipe
