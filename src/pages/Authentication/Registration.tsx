@@ -39,9 +39,9 @@ const Registration = () => {
 			if (res.success) {
 				console.log(res.data.token)
 				toast.success("Registration Successful.")
-				navigate("/")
 				const userDecoded = jwtDecode(res.data.token)
 				dispatch(setToken({ user: userDecoded, token: res.data.token }))
+				navigate("/")
 			} else {
 				console.log("Unexpected response:", res.data)
 			}

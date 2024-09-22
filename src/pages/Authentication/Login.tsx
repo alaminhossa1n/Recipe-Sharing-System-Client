@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
 const loginSchema = z.object({
 	email: z.string(),
@@ -37,8 +38,9 @@ const Login = () => {
 	const onSubmit = async (data) => {
 		const res = await login(data).unwrap()
 		if (res.success === true) {
-			console.log(res.data.data.token)
-			const userDecoded = jwtDecode(res.data.token)
+			toast.success("Login Successful.")
+
+			const userDecoded = jwtDecode(res.data.data.token)
 			dispatch(setToken({ user: userDecoded, token: res.data.data.token }))
 		}
 	}
