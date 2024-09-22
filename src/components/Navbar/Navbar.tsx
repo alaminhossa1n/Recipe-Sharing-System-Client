@@ -1,13 +1,30 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../redux/hooks";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Providers/AuthProvider";
-import { useGetSingleUserQuery } from "../../redux/features/auth/authApi";
-import CountUp from "react-countup";
-import { FaCoins } from "react-icons/fa";
-import { TUser } from "../../interface/interface";
+import { Link } from "react-router-dom"
+import { useAppSelector } from "../../redux/hooks"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext, type AuthContextType } from "../../Providers/AuthProvider"
+import { useGetSingleUserQuery } from "../../redux/features/auth/authApi"
+import type { TUser } from "../../interface/interface"
+import {
+	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+} from "@/components/ui/navigation-menu"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { CoinsIcon, UserIcon } from "lucide-react"
+import { Button } from "../ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const Navbar = () => {
+<<<<<<< HEAD
   const token: Partial<TUser> | null = useAppSelector(
     (state) => state.auth.user
   );
@@ -15,20 +32,83 @@ const Navbar = () => {
   const currentUser = data?.data;
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext)!;
   const navigate = useNavigate();
+=======
+	const token: Partial<TUser> | null = useAppSelector(
+		(state) => state.auth.user,
+	)
+	const { data } = useGetSingleUserQuery({ email: token?.email })
+	const currentUser = data?.data as TUser
+	console.log(currentUser)
+	const { handleSignOut } = useContext(AuthContext) as AuthContextType
 
-  const [isScrolled, setIsScrolled] = useState(false);
+	return (
+		<nav
+			className={`bg-secondary py-5 z-50 transition-all duration-300 font-bold w-full`}
+		>
+			<div className="container mx-auto flex items-center gap-2">
+				<span className="text-2xl font-bold">Recipe Sharing</span>
+>>>>>>> 35b46118acd7d95eda81d50f6c1a27b3c5e4b2ba
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
+				<div className="ml-auto flex gap-5 items-center">
+					<NavigationMenu>
+						<NavigationMenuList className="gap-5">
+							<NavigationMenuItem>
+								<NavigationMenuLink>
+									<Link to="/">Home</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+							<NavigationMenuItem>
+								<NavigationMenuLink>
+									<Link to="/recipes">Recipe</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+							<NavigationMenuItem>
+								<NavigationMenuLink>
+									<Link to="/add-recipe">Add Recipe</Link>
+								</NavigationMenuLink>
+							</NavigationMenuItem>
+						</NavigationMenuList>
+					</NavigationMenu>
 
-    window.addEventListener("scroll", handleScroll);
+					{currentUser && (
+						<div>
+							<Button variant="outline" size="sm">
+								<CoinsIcon className="mr-2" />
+								<span>{currentUser.coin || 0} coins</span>
+							</Button>
+						</div>
+					)}
 
+					{currentUser ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Avatar>
+									<AvatarImage src={currentUser.photoURL} />
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>My Account</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onSelect={() => handleSignOut()}>
+									Logout
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<Button variant="secondary" asChild>
+							<Link to="/login">
+								<UserIcon className="mr-2" size={15} /> Login
+							</Link>
+						</Button>
+					)}
+				</div>
+			</div>
+		</nav>
+	)
+}
+
+<<<<<<< HEAD
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -107,3 +187,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+=======
+export default Navbar
+>>>>>>> 35b46118acd7d95eda81d50f6c1a27b3c5e4b2ba

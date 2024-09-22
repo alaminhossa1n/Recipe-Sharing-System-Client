@@ -1,10 +1,5 @@
-
 const RelatedRecipe = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+	return <div></div>
+}
 
-export default RelatedRecipe;
+export default RelatedRecipe

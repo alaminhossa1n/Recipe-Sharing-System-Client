@@ -1,54 +1,36 @@
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../redux/hooks";
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { PlusIcon } from "lucide-react"
 
 const Banner = () => {
-  const currentUser = useAppSelector((state) => state.auth.user);
-  const navigate = useNavigate();
+	return (
+		<div className="bg-cover bg-center py-10 bg-secondary">
+			<div className="container mx-auto grid grid-cols-2 gap-5">
+				<div className="flex flex-col gap-2 justify-center">
+					<h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
+						Discover Delicious Recipes
+					</h1>
+					<p className="text-lg md:text-xl lg:text-2xl mb-8">
+						Cook, Share, and Enjoy with Our Community
+					</p>
+					<div className="flex gap-2">
+						<Button asChild variant="default">
+							<Link to="/recipes">See Recipes</Link>
+						</Button>
+						<Button asChild variant="outline">
+							<Link to="/add-recipe">
+								<PlusIcon size={15} className="mr-2" /> Add Recipe
+							</Link>
+						</Button>
+					</div>
+				</div>
 
-  const handleSeeRecipes = () => {
-    navigate("/recipes");
-  };
+				<div>
+					<img src="/banner.png" alt="banner" />
+				</div>
+			</div>
+		</div>
+	)
+}
 
-  const handleAddRecipes = () => {
-    if (currentUser) {
-      navigate("/add-recipe");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  return (
-    <div
-      className="flex items-center justify-center h-screen bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://static.cordonbleu.edu/Files/MediaFile/63472.jpg')",
-      }}
-    >
-      <div className="bg-black bg-opacity-50 p-6 md:p-10 rounded-lg text-center max-w-lg md:max-w-2xl mx-auto">
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-          Discover Delicious Recipes
-        </h1>
-        <p className="text-lg md:text-xl lg:text-2xl text-white mb-8">
-          Cook, Share, and Enjoy with Our Community
-        </p>
-        <div className="flex flex-col md:flex-row justify-center">
-          <button
-            onClick={handleSeeRecipes}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mb-4 md:mb-0 md:mr-4"
-          >
-            See Recipes
-          </button>
-          <button
-            onClick={handleAddRecipes}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Add Recipes
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Banner;
+export default Banner

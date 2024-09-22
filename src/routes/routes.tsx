@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/Home/Home";
@@ -72,5 +73,68 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+=======
+import { createBrowserRouter } from "react-router-dom"
+import App from "../App"
+import Home from "../pages/Home/Home"
+import Recipes from "../pages/recipes/Recipes"
+import AddRecipe from "../pages/recipes/AddRecipe"
+import Payment from "../pages/payment/Payment"
+import RecipeDetails from "../pages/recipes/RecipeDetails"
+import BuyCoin from "../pages/payment/BuyCoin"
+import PrivateRoute from "./PrivateRoute"
+import PrivateRecipeDetails from "./PrivateRecipeDetails"
+import Login from "../pages/Authentication/Login"
+import Registration from "../pages/Authentication/Registration"
 
-export default router;
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <App />,
+		children: [
+			{
+				path: "/",
+				element: <Home />,
+			},
+			{
+				path: "/login",
+				element: <Login />,
+			},
+			{
+				path: "/register",
+				element: <Registration />,
+			},
+			{
+				path: "/recipes",
+				element: <Recipes />,
+			},
+			{
+				path: "/recipe-details/:id",
+				element: (
+					<PrivateRecipeDetails>
+						<RecipeDetails />
+					</PrivateRecipeDetails>
+				),
+			},
+			{
+				path: "/add-recipe",
+				element: (
+					<PrivateRoute>
+						<AddRecipe />
+					</PrivateRoute>
+				),
+			},
+			{
+				path: "/payment",
+				element: <Payment />,
+			},
+			{
+				path: "/buy-coin",
+				element: <BuyCoin />,
+			},
+		],
+	},
+])
+>>>>>>> 35b46118acd7d95eda81d50f6c1a27b3c5e4b2ba
+
+export default router
