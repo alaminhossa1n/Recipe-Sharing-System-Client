@@ -1,19 +1,19 @@
-import { Navigate } from "react-router";
-import { useAppSelector } from "../redux/hooks";
-import { ReactNode } from "react";
+import { Navigate } from "react-router"
+import { useAppSelector } from "../redux/hooks"
+import { ReactNode } from "react"
 
 interface Tprops {
-  children: ReactNode;
+	children: ReactNode
 }
 
 const PrivateLoginRegi: React.FC<Tprops> = ({ children }) => {
-  const token = useAppSelector((state) => state.auth.user);
+	const token = useAppSelector((state) => state.auth.user)
 
-  if (token) {
-    return <Navigate to="/"></Navigate>;
-  } else {
-    return children;
-  }
-};
+	if (token) {
+		return <Navigate to="/"></Navigate>
+	} else {
+		return children
+	}
+}
 
-export default PrivateLoginRegi;
+export default PrivateLoginRegi
