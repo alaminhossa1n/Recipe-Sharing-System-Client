@@ -61,7 +61,7 @@ const Registration = () => {
 
 	return (
 		<div className="min-h-[60vh]">
-			<div className="w-full max-w-md mx-auto rounded-lg shadow-lg">
+			<div className="w-full max-w-md mx-auto rounded-lg shadow-lg mt-20">
 				<h2 className="text-2xl font-bold mb-6 text-center">
 					Register Your Account
 				</h2>
