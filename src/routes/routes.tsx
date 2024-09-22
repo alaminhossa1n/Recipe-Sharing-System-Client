@@ -10,6 +10,7 @@ import PrivateRoute from "./PrivateRoute";
 import PrivateRecipeDetails from "./PrivateRecipeDetails";
 import Login from "../pages/Authentication/Login";
 import Registration from "../pages/Authentication/Registration";
+import PrivateLoginRegi from "./PrivateLoginRegi";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +23,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <PrivateLoginRegi>
+            <Login />
+          </PrivateLoginRegi>
+        ),
       },
       {
         path: "/register",
-        element: <Registration />,
+        element: (
+          <PrivateLoginRegi>
+            <Registration />
+          </PrivateLoginRegi>
+        ),
       },
       {
         path: "/recipes",
@@ -54,7 +63,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/buy-coin",
-        element: <BuyCoin />,
+        element: (
+          <PrivateRoute>
+            <BuyCoin />
+          </PrivateRoute>
+        ),
       },
     ],
   },

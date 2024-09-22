@@ -50,7 +50,6 @@ const AuthProvider: React.FC<Tprops> = ({ children }) => {
           const userDecoded = jwtDecode(res.data.token);
           dispatch(setToken({ user: userDecoded, token: res.data.token }));
           toast.success("Login Successful.");
-          window.location.href = '/';
         }
       } catch (err) {
         console.log("Error during login:", err);

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../Providers/AuthProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
 import { setToken } from "../../redux/features/auth/authSlice";
@@ -13,7 +13,6 @@ const Login = () => {
   const { handleGoogleSignIn } = useContext(AuthContext)!;
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -28,7 +27,6 @@ const Login = () => {
 
       const userDecoded = jwtDecode(res.data.data.token);
       dispatch(setToken({ user: userDecoded, token: res.data.data.token }));
-      navigate("/");
     }
   };
 

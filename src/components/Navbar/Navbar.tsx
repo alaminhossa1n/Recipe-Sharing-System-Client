@@ -13,7 +13,6 @@ const Navbar = () => {
   );
   const { data } = useGetSingleUserQuery({ email: token?.email });
   const currentUser = data?.data;
-
   const { handleGoogleSignIn, handleSignOut } = useContext(AuthContext)!;
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ const Navbar = () => {
     if (currentUser) {
       navigate("/add-recipe");
     } else {
-      handleGoogleSignIn();
+      navigate("/login");
     }
   };
 
@@ -58,13 +57,18 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-center  lg:flex gap-5">
-        <Link to={"recipes"}>
+        <Link to={"/recipes"}>
           <button className="btn btn-neutral">Recipes</button>
         </Link>
         {token && (
           <button onClick={handleAddRecipes} className="btn btn-neutral">
             Add Recipes
           </button>
+        )}
+        {token && (
+          <Link to={"/buy-coin"}>
+            <button className="btn btn-neutral">Buy Coin</button>
+          </Link>
         )}
       </div>
       <div className="navbar-end">
@@ -80,7 +84,7 @@ const Navbar = () => {
           <img
             className="size-14 rounded-full"
             src={currentUser?.photoURL}
-            alt=""
+            alt="User photo"
           />
           {currentUser ? (
             <button

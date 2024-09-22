@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRegistrationMutation } from "../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
 import { useAppDispatch } from "../../redux/hooks";
@@ -9,7 +9,6 @@ import { toast } from "sonner";
 const Registration = () => {
   const [registration] = useRegistrationMutation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,7 +22,6 @@ const Registration = () => {
       if (res.success) {
         console.log(res.data.token);
         toast.success("Registration Successful.");
-        navigate("/");
         const userDecoded = jwtDecode(res.data.token);
         dispatch(setToken({ user: userDecoded, token: res.data.token }));
       } else {

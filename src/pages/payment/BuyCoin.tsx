@@ -9,7 +9,7 @@ const BuyCoin = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 p-6">
+    <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 p-6 mt-20">
       {/* Card 1 */}
       <div className=" bg-green-100 shadow-lg rounded-lg overflow-hidden p-6 text-center">
         <div className="mb-4">
