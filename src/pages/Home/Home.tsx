@@ -1,15 +1,12 @@
 import { BookCheck, ChevronRight, Users, Utensils } from "lucide-react"
-import DevInfo from "../../components/DevInfo"
-import SuccessStories from "../../components/SuccessStories"
 import Banner from "./Banner"
 import CountUp from "react-countup"
 import { useGetAllRecipeQuery } from "@/redux/features/recipe/recipeApi"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 
 const Home = () => {
-	const { data, isLoading, isError } = useGetAllRecipeQuery({
+	const { data } = useGetAllRecipeQuery({
 		recipeName: "",
 		category: "",
 		country: "",
