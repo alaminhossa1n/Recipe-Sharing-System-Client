@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button"
 import { z } from "zod"
 
 const loginSchema = z.object({
-	name: z.string(),
+	displayName: z.string(),
 	email: z.string(),
 	password: z.string(),
 })
@@ -37,7 +37,6 @@ const Registration = () => {
 			const res = await registration(data).unwrap()
 
 			if (res.success) {
-				console.log(res.data.token)
 				toast.success("Registration Successful.")
 				const userDecoded = jwtDecode(res.data.token)
 				dispatch(setToken({ user: userDecoded, token: res.data.token }))
@@ -71,7 +70,7 @@ const Registration = () => {
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 						<FormField
 							control={form.control}
-							name="name"
+							name="displayName"
 							render={({ field }) => (
 								<FormItem className="mt-5">
 									<FormLabel>Name</FormLabel>
