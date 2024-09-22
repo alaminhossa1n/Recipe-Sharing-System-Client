@@ -54,7 +54,7 @@ const Home = () => {
 					<div className="grid grid-cols-3 gap-5 mt-10">
 						{recipes.slice(0, 3).map((recipe) => (
 							<div
-								key={recipe.id}
+								key={recipe._id}
 								className="bg-zinc-900 rounded-lg overflow-hidden"
 							>
 								<img

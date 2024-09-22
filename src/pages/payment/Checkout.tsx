@@ -133,15 +133,15 @@ const Checkout = () => {
 	}
 	return (
 		<div className="max-w-lg mx-auto p-6">
-			<div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-				<h2 className="text-2xl font-semibold text-gray-800 mb-4">
+			<div className="bg-secondary rounded-lg shadow-lg p-6 mb-8">
+				<h2 className="text-2xl font-semibold text-gray-300 mb-4">
 					Payment Details
 				</h2>
 				{cardError && <p className="text-red-600 mb-4">{cardError}</p>}
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
 						<label
-							className="block text-gray-700 text-sm font-bold mb-2"
+							className="block text-gray-300 text-sm font-bold mb-2"
 							htmlFor="card-element"
 						>
 							Card Details
@@ -165,13 +165,13 @@ const Checkout = () => {
 							/>
 						</div>
 					</div>
-					<div className="bg-green-500 rounded-lg shadow-lg py-6 text-center text-white mb-4">
+					<div className="bg-gray-600 rounded-lg shadow-lg py-6 text-center text-white mb-4">
 						<h2 className="text-2xl font-semibold mb-4">Total Amount</h2>
 						<p className="text-lg mb-2">Payable Amount: ${price}</p>
 						<p className="text-lg">You'll get {coin} coins.</p>
 					</div>
 					<button
-						className="text-white font-bold py-2 px-4 rounded w-full btn btn-neutral"
+						className="bg-green-600 font-bold py-2 px-4 rounded w-full"
 						type="submit"
 						// disabled={!stripe || !clientSecret}
 					>
