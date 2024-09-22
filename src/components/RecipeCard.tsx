@@ -1,4 +1,3 @@
-import Swal from "sweetalert2"
 import type { TRecipe, TUser } from "../interface/interface"
 import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../redux/hooks"
@@ -20,7 +19,6 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
 interface RecipeCardProps {

@@ -4,7 +4,7 @@ import {
 	useGetSingleRecipeQuery,
 } from "../../redux/features/recipe/recipeApi"
 import RecipeCard from "../../components/RecipeCard"
-import { TRecipe } from "../../interface/interface"
+import type { TRecipe } from "../../interface/interface"
 
 const RecipeDetails = () => {
 	const { id } = useParams()
@@ -30,34 +30,33 @@ const RecipeDetails = () => {
 
 	return (
 		<section>
-			<div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden my-8 p-6">
+			<div className="container px-5 mx-auto mt-20">
 				<img
-					className="w-full h-64 object-cover"
+					className="w-full aspect-video object-cover rounded-md"
 					src={recipe?.recipeImage}
 					alt={recipe?.recipeName}
 				/>
-				<div className="p-6">
-					<h2 className="text-2xl font-bold text-gray-900 mb-4">
+				<div className="mt-5">
+					<h2 className="text-4xl font-bold capitalize">
 						{recipe?.recipeName}
 					</h2>
-					<p className="text-lg text-gray-800 mb-4">{recipe?.recipeDetails}</p>
-					<div className="mb-4">
+					<p className="text-muted-foreground">{recipe?.recipeDetails}</p>
+					<div className="mt-5">
 						<strong>Category:</strong>{" "}
-						<span className="text-gray-700">{recipe?.category}</span>
+						<span className="">{recipe?.category}</span>
 					</div>
-					<div className="mb-4">
+					<div className="mt-1">
 						<strong>Country:</strong>{" "}
-						<span className="text-gray-700">{recipe?.country}</span>
+						<span className="">{recipe?.country}</span>
 					</div>
-					<div className="mb-4">
+					<div className="mt-1">
 						<strong>Creator Email:</strong>{" "}
-						<span className="text-gray-700">{recipe?.creatorEmail}</span>
+						<span className="">{recipe?.creatorEmail}</span>
 					</div>
+
 					{recipe?.video && (
-						<div className="mb-4">
-							<h3 className="text-xl font-semibold text-gray-900 mb-2">
-								Recipe Video
-							</h3>
+						<div className="mt-5">
+							<h3 className="text-2xl font-bold  mb-2">Recipe Video</h3>
 							<iframe
 								width="100%"
 								height="400"
@@ -72,8 +71,8 @@ const RecipeDetails = () => {
 				</div>
 			</div>
 
-			<div className="mt-10 p-10">
-				<h3 className="text-xl text-center font-bold text-gray-900 mb-4">
+			<div className="container mx-auto px-5">
+				<h3 className="text-xl text-center font-bold  mb-4">
 					Suggested Recipes
 				</h3>
 				<div className="grid grid-cols-3 gap-6">
