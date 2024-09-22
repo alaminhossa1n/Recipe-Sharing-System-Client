@@ -4,6 +4,14 @@ import { useGetAllCategoriesQuery } from "../../redux/features/category/category
 import { useGetAllCountriesQuery } from "../../redux/features/country/countryApi"
 import { useGetAllRecipeQuery } from "../../redux/features/recipe/recipeApi"
 import type { TRecipe } from "../../interface/interface"
+import { Input } from "@/components/ui/input"
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
 
 const Recipes: React.FC = () => {
 	const { data: categoryData } = useGetAllCategoriesQuery(null)
@@ -27,16 +35,16 @@ const Recipes: React.FC = () => {
 
 	const recipes = data?.data || []
 
-	const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setSearchQuery(e.target.value)
+	const handleSearchChange = (value: string) => {
+		setSearchQuery(value)
 	}
 
-	const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setSelectedCategory(e.target.value)
+	const handleCategoryChange = (value: string) => {
+		setSelectedCategory(value)
 	}
 
-	const handleCountryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setSelectedCountry(e.target.value)
+	const handleCountryChange = (value: string) => {
+		setSelectedCountry(value)
 	}
 
 	// Update filters whenever searchQuery, selectedCategory, or selectedCountry change
@@ -62,60 +70,48 @@ const Recipes: React.FC = () => {
 
 	return (
 		<div className="container mx-auto px-4 mt-28">
-			<div className="my-4 w-full flex justify-center">
-				<input
-					type="text"
-					value={searchQuery}
-					onChange={handleSearchChange}
+			<div>
+				<Input
+					onChange={(e) => handleSearchChange(e.target.value)}
 					placeholder="Search by name"
-					className="w-full sm:w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
 				/>
-			</div>
-			<div className="flex flex-col sm:flex-row w-full sm:w-1/2 justify-between mx-auto">
-				<div className="mb-4 sm:mb-0 sm:mr-2">
-					<label className="block text-gray-700">Category</label>
-					<select
-						value={selectedCategory}
-						onChange={handleCategoryChange}
-						className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-					>
-						<option value="">Select a category</option>
-						{categories &&
-							categories.map(
-								(category: { categoryName: string }, index: number) => (
-									<option key={index} value={category.categoryName}>
-										{category.categoryName}
-									</option>
-								),
-							)}
-					</select>
-				</div>
 
-				<div className="mb-4 sm:mb-0 sm:ml-2">
-					<label className="block text-gray-700">Country</label>
-					<select
-						value={selectedCountry}
-						onChange={handleCountryChange}
-						className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-					>
-						<option value="">Select a country</option>
-						{countries &&
-							countries.map(
-								(country: { countryName: string }, index: number) => (
-									<option key={index} value={country.countryName}>
-										{country.countryName}
-									</option>
+				<div className="grid grid-cols-2 gap-5 mt-5">
+					<Select onValueChange={(value) => handleCategoryChange(value)}>
+						<SelectTrigger>
+							<SelectValue placeholder="Category" />
+						</SelectTrigger>
+						<SelectContent>
+							{categories?.map(
+								(category: { categoryName: string }, index: number) => (
+									<SelectItem key={index} value={category.categoryName}>
+										{category.categoryName}
+									</SelectItem>
 								),
 							)}
-					</select>
+						</SelectContent>
+					</Select>
+					<Select onValueChange={(value) => handleCountryChange(value)}>
+						<SelectTrigger>
+							<SelectValue placeholder="Country" />
+						</SelectTrigger>
+						<SelectContent>
+							{countries?.map(
+								(country: { countryName: string }, index: number) => (
+									<SelectItem key={index} value={country.countryName}>
+										{country.countryName}
+									</SelectItem>
+								),
+							)}
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-10 mt-10">
-				{recipes &&
-					recipes.map((recipe: TRecipe, i: number) => (
-						<RecipeCard key={i} recipe={recipe} />
-					))}
+				{recipes?.map((recipe: TRecipe, i: number) => (
+					<RecipeCard key={i} recipe={recipe} />
+				))}
 			</div>
 		</div>
 	)

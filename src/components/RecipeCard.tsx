@@ -1,22 +1,34 @@
 import Swal from "sweetalert2"
-import { TRecipe, TUser } from "../interface/interface"
+import type { TRecipe, TUser } from "../interface/interface"
 import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../redux/hooks"
-import { BiSolidLike } from "react-icons/bi"
 import { toast } from "sonner"
 import { useGetSingleUserQuery } from "../redux/features/auth/authApi"
 import {
 	useReactRecipeMutation,
 	useViewRecipeMutation,
 } from "../redux/features/recipe/recipeApi"
-import { FaEye } from "react-icons/fa"
 import { useState } from "react"
+import { Eye, Globe2, Mail, ThumbsUp } from "lucide-react"
+import { Button } from "./ui/button"
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface RecipeCardProps {
 	recipe: TRecipe
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
+	const [viewOpen, setViewOpen] = useState(false)
 	const token: Partial<TUser | null> = useAppSelector(
 		(state) => state.auth.user,
 	)
@@ -26,7 +38,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 	const currentUser = data?.data
 
 	const [isReact, setIsReact] = useState(
-		recipe.reactors?.includes(currentUser?.email) ? true : false,
+		recipe.reactors?.includes(currentUser?.email),
 	)
 	const navigate = useNavigate()
 
@@ -50,7 +62,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 			? recipe.purchased_by.find((n) => n === currentUser?.email)
 			: undefined
 
-		if (parchedUser === currentUser?.email) {
+		if (parchedUser) {
 			navigate(`/recipe-details/${recipe._id}`)
 			await viewRecipe({
 				id: recipe._id,
@@ -59,33 +71,27 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 			return
 		}
 
-		Swal.fire({
-			title: "Do you want to spend 10 coin?",
-			showDenyButton: true,
-			confirmButtonText: "Yes",
-			denyButtonText: `No`,
-		}).then(async (result) => {
-			/* Read more about isConfirmed, isDenied below */
-			if (result.isConfirmed) {
-				if (currentUser.coin >= 10) {
-					const res = await viewRecipe({
-						id: recipe._id,
-						recipeInfo: {
-							viewerEmail: currentUser.email,
-							creatorEmail: recipe.creatorEmail,
-						},
-					}).unwrap()
+		setViewOpen(true)
+	}
 
-					if (res.success === true) {
-						toast.success("Now you have access of this recipe")
-						navigate(`/recipe-details/${recipe._id}`)
-						refetch()
-					}
-				} else {
-					navigate(`/buy-coin`)
-				}
+	const handleRecipePurchase = async () => {
+		if (currentUser.coin >= 10) {
+			const res = await viewRecipe({
+				id: recipe._id,
+				recipeInfo: {
+					viewerEmail: currentUser.email,
+					creatorEmail: recipe.creatorEmail,
+				},
+			}).unwrap()
+
+			if (res.success === true) {
+				toast.success("Now you have access of this recipe")
+				navigate(`/recipe-details/${recipe._id}`)
+				refetch()
 			}
-		})
+		} else {
+			navigate(`/buy-coin`)
+		}
 	}
 
 	const handleReactionClick = async () => {
@@ -103,37 +109,47 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 	}
 
 	return (
-		<div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+		<div className="bg-secondary rounded-lg overflow-hidden">
 			<img
-				className="w-full h-48 object-cover"
+				className="w-full aspect-video object-cover"
 				src={recipe.recipeImage}
 				alt={recipe.recipeName}
 			/>
 			<div className="p-6">
-				<h2 className="text-xl font-bold text-gray-900 mb-2">
-					{recipe.recipeName}
-				</h2>
-				<p className="text-gray-700 mb-1">
-					<strong>Purchased By:</strong> {recipe?.purchased_by?.join(", ")}
+				<h2 className="text-2xl font-bold mb-2">{recipe.recipeName}</h2>
+				<p className="flex items-center gap-2">
+					<Mail size={20} /> <span>{recipe.creatorEmail}</span>
 				</p>
-				<p className="text-gray-700 mb-1">
-					<strong>Creator Email:</strong> {recipe.creatorEmail}
-				</p>
-				<p className="text-gray-700 mb-1">
-					<strong>Country:</strong> {recipe.country}
+				<p className="flex items-center gap-2 mt-1">
+					<Globe2 size={20} /> <span>{recipe.country}</span>
 				</p>
 				<div className="flex justify-between items-center mt-4">
-					<button
-						className="btn btn-neutral"
-						onClick={() => handleViewRecipe(recipe)}
-					>
+					<Button variant="outline" onClick={() => handleViewRecipe(recipe)}>
 						View The Recipe
-					</button>
+					</Button>
+
+					<AlertDialog open={viewOpen} onOpenChange={setViewOpen}>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Buy Recipe</AlertDialogTitle>
+								<AlertDialogDescription>
+									You are about to spend 10 coins to view this recipe
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction onClick={handleRecipePurchase}>
+									Continue
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+
 					<div className="flex items-center">
 						<p className={`text-2xl text-blue-500`}>
-							<FaEye />
+							<Eye size={15} />
 						</p>
-						<span className="ml-2 text-gray-700">{recipe?.watchCount}</span>
+						<span className="ml-2 ">{recipe?.watchCount}</span>
 					</div>
 
 					<div className="flex items-center">
@@ -145,11 +161,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 							}`}
 							onClick={handleReactionClick}
 						>
-							<BiSolidLike />
+							<ThumbsUp size={15} />
 						</p>
-						<span className="ml-2 text-gray-700">
-							{recipe.reactors?.length}
-						</span>
+						<span className="ml-2 ">{recipe.reactors?.length}</span>
 					</div>
 				</div>
 			</div>
