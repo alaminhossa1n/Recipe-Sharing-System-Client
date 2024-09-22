@@ -71,11 +71,9 @@ const RecipeDetails = () => {
 				</div>
 			</div>
 
-			<div className="container mx-auto px-5">
-				<h3 className="text-xl text-center font-bold  mb-4">
-					Suggested Recipes
-				</h3>
-				<div className="grid grid-cols-3 gap-6">
+			<div className="container mx-auto px-5 mt-10">
+				<h3 className="text-2xl font-bold">Suggested Recipes</h3>
+				<div className="grid grid-cols-3 gap-5 mt-2">
 					{recipes &&
 						sortedRecipes.map((recipe: TRecipe, i: number) => (
 							<RecipeCard recipe={recipe} key={i} />
