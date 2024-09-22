@@ -8,6 +8,24 @@ const BuyCoin = () => {
 		navigate("/payment", { state: { price, coin } })
 	}
 
+<<<<<<< HEAD
+  return (
+    <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 p-6 mt-20">
+      {/* Card 1 */}
+      <div className=" bg-green-100 shadow-lg rounded-lg overflow-hidden p-6 text-center">
+        <div className="mb-4">
+          <FaCoins className="text-green-500 text-6xl mx-auto" />
+        </div>
+        <h2 className="text-3xl font-bold mb-4 text-green-700">100</h2>
+        <p className="text-gray-700 mb-6">Pay $1</p>
+        <button
+          onClick={() => handlePurchase(1, 100)}
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600"
+        >
+          Purchase
+        </button>
+      </div>
+=======
 	return (
 		<div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 p-6">
 			{/* Card 1 */}
@@ -24,6 +42,7 @@ const BuyCoin = () => {
 					Purchase
 				</button>
 			</div>
+>>>>>>> 35b46118acd7d95eda81d50f6c1a27b3c5e4b2ba
 
 			{/* Card 2 */}
 			<div className=" bg-blue-100 shadow-lg rounded-lg overflow-hidden p-6 text-center">

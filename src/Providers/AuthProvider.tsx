@@ -42,6 +42,22 @@ const AuthProvider: React.FC<Tprops> = ({ children }) => {
 				email: user?.email,
 			}
 
+<<<<<<< HEAD
+      try {
+        const res = await googleLogin(postData).unwrap();
+        if (res.success === true) {
+          const userDecoded = jwtDecode(res.data.token);
+          dispatch(setToken({ user: userDecoded, token: res.data.token }));
+          toast.success("Login Successful.");
+        }
+      } catch (err) {
+        console.log("Error during login:", err);
+      }
+    } catch (error) {
+      console.log("Error during Google sign-in:", error);
+    }
+  };
+=======
 			try {
 				const res = await googleLogin(postData).unwrap()
 				if (res.success === true) {
@@ -57,6 +73,7 @@ const AuthProvider: React.FC<Tprops> = ({ children }) => {
 			console.log("Error during Google sign-in:", error)
 		}
 	}
+>>>>>>> 35b46118acd7d95eda81d50f6c1a27b3c5e4b2ba
 
 	const handleSignOut = () => {
 		signOut(auth)
