@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useAppSelector } from "../../redux/hooks"
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { AuthContext, type AuthContextType } from "../../Providers/AuthProvider"
 import { useGetSingleUserQuery } from "../../redux/features/auth/authApi"
 import type { TUser } from "../../interface/interface"
@@ -72,9 +72,11 @@ const Navbar = () => {
 
 					{currentUser && (
 						<div>
-							<Button variant="outline" size="sm">
-								<CoinsIcon className="mr-2" />
-								<span>{currentUser.coin || 0} coins</span>
+							<Button size="sm" asChild>
+								<Link to="/buy-coin">
+									<CoinsIcon className="mr-2" />
+									<span>{currentUser.coin || 0} coins</span>
+								</Link>
 							</Button>
 						</div>
 					)}
@@ -96,7 +98,7 @@ const Navbar = () => {
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (
-						<Button variant="secondary" asChild>
+						<Button asChild>
 							<Link to="/login">
 								<UserIcon className="mr-2" size={15} /> Login
 							</Link>

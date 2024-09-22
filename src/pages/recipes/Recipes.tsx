@@ -1,4 +1,4 @@
-import { type ChangeEvent, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import RecipeCard from "../../components/RecipeCard"
 import { useGetAllCategoriesQuery } from "../../redux/features/category/categoryApi"
 import { useGetAllCountriesQuery } from "../../redux/features/country/countryApi"

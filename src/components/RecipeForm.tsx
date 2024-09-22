@@ -115,7 +115,7 @@ const RecipeForm: React.FC = () => {
 									<Input
 										value={field.value}
 										onChange={field.onChange}
-										placeholder=""
+										placeholder="Recipe Name"
 										{...field}
 									/>
 								</FormControl>
