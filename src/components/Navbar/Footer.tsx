@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 const Footer = () => {
 	return (
-		<footer className="">
+		<footer className="bg-secondary mt-20">
 			<div className="container px-5 mx-auto py-10">
 				<div className="flex items-center justify-center flex-col">
 					<h3 className="text-4xl font-bold">Recipe Sharing</h3>
@@ -19,7 +19,7 @@ const Footer = () => {
 					<FaPinterest />
 				</div>
 
-				<div className="py-5 border-t border-b mt-5">
+				<div className="py-5 border-t border-b border-zinc-700 mt-5">
 					<ul className="flex items-center gap-10 justify-center">
 						<li>
 							<Link to="/recipes">All Recipes</Link>
