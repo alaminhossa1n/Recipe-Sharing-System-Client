@@ -2,16 +2,18 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { AuthContext } from "../../Providers/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
 import { setToken } from "../../redux/features/auth/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { toast } from "sonner";
 
 const Login = () => {
   const { handleGoogleSignIn } = useContext(AuthContext)!;
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -22,9 +24,11 @@ const Login = () => {
   const onSubmit = async (data) => {
     const res = await login(data).unwrap();
     if (res.success === true) {
-      console.log(res.data.data.token);
-      const userDecoded = jwtDecode(res.data.token);
+      toast.success("Login Successful.");
+
+      const userDecoded = jwtDecode(res.data.data.token);
       dispatch(setToken({ user: userDecoded, token: res.data.data.token }));
+      navigate("/");
     }
   };
 
